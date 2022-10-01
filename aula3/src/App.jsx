@@ -1,32 +1,48 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+import { AddressInfo } from './components/AddressInfo'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [zipCode, setZipCode] = useState('');
+  const [dataAddress, setDataAddress] = useState({});
+
+  function handleChangeZipCode(event){
+    setZipCode(event.target.value)
+  }
+  
+  function handleClickSearchButton(){
+    if (zipCode.length < 8) {
+      return;
+    } else {
+      fetch(`https://viacep.com.br/ws/${zipCode}/json`, { mode: 'cors' })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.hasOwnProperty("erro")) {
+            alert('Cep não existente');
+          } else {
+            setDataAddress(data);
+          }
+        })
+        .catch(err => console.log(err));
+    }
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Olá esse é meu primeiro contato com o react!</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <input 
+        value = {zipCode}
+        onChange = {handleChangeZipCode}
+        placeholder="Digite seu cep"
+        />
+        <button onClick={handleClickSearchButton}>
+          Pesquisar
+          </button>
+        <AddressInfo 
+          address = {dataAddress.logradouro}
+          district = {dataAddress.bairro}
+          city = {dataAddress.localidade} 
+          state = {dataAddress.uf}
+          />
     </div>
   )
 }

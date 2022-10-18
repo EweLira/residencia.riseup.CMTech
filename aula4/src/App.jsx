@@ -4,12 +4,10 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
-
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { green } from '@mui/material/colors';
 import { MySnackbar } from "./components/MySnackbar"
-
 
 
 function App() {
@@ -47,9 +45,8 @@ function App() {
 
   function handleClickSearchButton() {
     if (zipCode.length < 8) {
-		openNotification("info", "Informe o CEP corretamente!", true); // adicionar essa linha		
-		setLoading(false); // adicionar essa linha
-      return;
+		openNotification("info", "Informe o CEP corretamente!", true); 
+		setLoading(false); 
     } else {
 
 	  setLoading(true);	
